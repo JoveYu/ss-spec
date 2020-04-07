@@ -31,6 +31,16 @@ iptables -t mangle -N SHADOWSOCKS
 echo '>> ignore ss server ip'
 iptables -t nat -A SHADOWSOCKS -d $IP -j RETURN
 
+echo '>> ignore local ip'
+iptables -t nat -A SHADOWSOCKS -d 0.0.0.0/8 -j RETURN
+iptables -t nat -A SHADOWSOCKS -d 10.0.0.0/8 -j RETURN
+iptables -t nat -A SHADOWSOCKS -d 127.0.0.0/8 -j RETURN
+iptables -t nat -A SHADOWSOCKS -d 169.254.0.0/16 -j RETURN
+iptables -t nat -A SHADOWSOCKS -d 172.16.0.0/12 -j RETURN
+iptables -t nat -A SHADOWSOCKS -d 192.168.0.0/16 -j RETURN
+iptables -t nat -A SHADOWSOCKS -d 224.0.0.0/4 -j RETURN
+iptables -t nat -A SHADOWSOCKS -d 240.0.0.0/4 -j RETURN
+
 echo '>> ignore ipset ip'
 iptables -t nat -A SHADOWSOCKS -m set --match-set ss_spec dst -j RETURN
 iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 1080
